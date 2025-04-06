@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shop_flutter/models/product.dart';
 import 'package:shop_flutter/pages/app_pages.dart';
 
-class ProductItem extends StatelessWidget {
+class ProductItemWidget extends StatelessWidget {
   final Product product;
 
-  const ProductItem({super.key, required this.product});
+  const ProductItemWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
