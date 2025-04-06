@@ -17,14 +17,17 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple)
-            .copyWith(secondary: Colors.deepOrange),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple).copyWith(secondary: Colors.deepOrange),
         fontFamily: 'Lato',
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(fontFamily: 'Lato', fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          backgroundColor: Colors.purple,
+          centerTitle: true,
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
       ),
       home: ProductsOverviewPage(),
-      routes: {
-        AppPages.PRODUCT_DETAIL : (ctx) => ProductDetailPage(),
-      },
+      routes: {AppPages.PRODUCT_DETAIL: (ctx) => ProductDetailPage()},
     );
   }
 }

@@ -12,12 +12,10 @@ class ProductsOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MyShop', style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-        backgroundColor: Colors.purple,
+        title: const Text('MyShop'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.shopping_cart, color: Colors.white),
+            icon: const Icon(Icons.shopping_cart),
             onPressed: () {
               // Navigator.of(context).pushNamed(CartScreen.routeName);
             },
