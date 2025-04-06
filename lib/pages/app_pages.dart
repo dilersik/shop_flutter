@@ -1,3 +1,3 @@
 class AppPages {
-  static const PRODUCT_DETAIL = '/product-detail';
+  static const productDetail = '/product-detail';
 }

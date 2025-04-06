@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: ProductsOverviewPage(),
-        routes: {AppPages.PRODUCT_DETAIL: (ctx) => ProductDetailPage()},
+        routes: {AppPages.productDetail: (ctx) => ProductDetailPage()},
       ),
     );
   }
