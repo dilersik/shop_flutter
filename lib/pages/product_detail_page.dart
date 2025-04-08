@@ -12,7 +12,7 @@ class ProductDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.title),
+        title: Text(product.name),
       ),
       body: Center(
         child: Column(
@@ -21,7 +21,7 @@ class ProductDetailPage extends StatelessWidget {
             Image.network(product.imageUrl),
             SizedBox(height: 20),
             Text(
-              product.title,
+              product.name,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
