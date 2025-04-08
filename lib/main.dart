@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_flutter/models/cart.dart';
 import 'package:shop_flutter/pages/app_pages.dart';
 import 'package:shop_flutter/pages/product_detail_page.dart';
 import 'package:shop_flutter/pages/products_overview_page.dart';
@@ -16,8 +17,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) => ProductList(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (ctx) => ProductList()),
+        ChangeNotifierProvider(create: (ctx) => Cart()),
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -25,7 +29,12 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple).copyWith(secondary: Colors.deepOrange),
           fontFamily: 'Lato',
           appBarTheme: const AppBarTheme(
-            titleTextStyle: TextStyle(fontFamily: 'Lato', fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+            titleTextStyle: TextStyle(
+              fontFamily: 'Lato',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
             backgroundColor: Colors.purple,
             centerTitle: true,
             iconTheme: IconThemeData(color: Colors.white),
