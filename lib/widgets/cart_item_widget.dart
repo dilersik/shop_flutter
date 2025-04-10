@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/cart.dart';
 import '../models/cart_item.dart';
 
 class CartItemWidget extends StatelessWidget {
@@ -10,6 +12,8 @@ class CartItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Cart>(context, listen: false);
+
     return Dismissible(
       key: ValueKey(cartItem.id),
       background: Container(
@@ -20,7 +24,7 @@ class CartItemWidget extends StatelessWidget {
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        // Handle item removal
+        provider.removeItem(cartItem.productId);
       },
       child: ListTile(
         leading: CircleAvatar(
