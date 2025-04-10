@@ -4,6 +4,7 @@ import 'package:shop_flutter/models/cart.dart';
 import 'package:shop_flutter/models/order_list.dart';
 import 'package:shop_flutter/pages/app_pages.dart';
 import 'package:shop_flutter/pages/cart_page.dart';
+import 'package:shop_flutter/pages/orders_page.dart';
 import 'package:shop_flutter/pages/product_detail_page.dart';
 import 'package:shop_flutter/pages/products_overview_page.dart';
 
@@ -43,10 +44,12 @@ class MyApp extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.white),
           ),
         ),
-        home: ProductsOverviewPage(),
+        // home: ProductsOverviewPage(),
         routes: {
+          AppPages.home: (ctx) => ProductsOverviewPage(),
           AppPages.productDetail: (ctx) => ProductDetailPage(),
           AppPages.cart: (ctx) => CartPage(),
+          AppPages.orders: (ctx) => OrdersPage(),
         },
       ),
     );
