@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter/models/cart.dart';
+import 'package:shop_flutter/models/order_list.dart';
 
 import '../widgets/cart_item_widget.dart';
 
@@ -10,6 +11,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+    final orderList = Provider.of<OrderList>(context, listen: false);
     final items = cart.items.values.toList();
 
     return Scaffold(
@@ -46,7 +48,8 @@ class CartPage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () {
-                // Checkout action
+                orderList.addOrder(cart);
+                cart.clear();
               },
               child: const Text('Checkout'),
             ),
