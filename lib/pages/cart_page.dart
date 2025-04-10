@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter/models/cart.dart';
 
+import '../widgets/cart_item_widget.dart';
+
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+    final items = cart.items.values.toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -25,21 +28,9 @@ class CartPage extends StatelessWidget {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: 5, // Replace with your cart item count
+              itemCount: items.length, // Replace with your cart item count
               itemBuilder: (context, index) {
-                return ListTile(
-                  leading: const CircleAvatar(
-                    backgroundImage: NetworkImage('https://example.com/image.jpg'), // Replace with your image URL
-                  ),
-                  title: const Text('Product Name'), // Replace with your product name
-                  subtitle: const Text('\$19.99'), // Replace with your product price
-                  trailing: IconButton(
-                    icon: const Icon(Icons.remove_circle),
-                    onPressed: () {
-                      // Remove item from cart action
-                    },
-                  ),
-                );
+                return CartItemWidget(cartItem: items[index]);
               },
             ),
           ),
