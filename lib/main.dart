@@ -6,6 +6,7 @@ import 'package:shop_flutter/pages/app_pages.dart';
 import 'package:shop_flutter/pages/cart_page.dart';
 import 'package:shop_flutter/pages/orders_page.dart';
 import 'package:shop_flutter/pages/product_detail_page.dart';
+import 'package:shop_flutter/pages/product_form_page.dart';
 import 'package:shop_flutter/pages/product_manager_page.dart';
 import 'package:shop_flutter/pages/products_overview_page.dart';
 
@@ -31,7 +32,9 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple).copyWith(secondary: Colors.deepOrange, outline: Colors.grey.shade300),
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.deepPurple,
+          ).copyWith(secondary: Colors.deepOrange, outline: Colors.grey.shade300),
           fontFamily: 'Lato',
           appBarTheme: const AppBarTheme(
             titleTextStyle: TextStyle(
@@ -44,12 +47,21 @@ class MyApp extends StatelessWidget {
             centerTitle: true,
             iconTheme: IconThemeData(color: Colors.white),
           ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepOrange,
+              foregroundColor: Colors.white, // text color
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              textStyle: const TextStyle(fontSize: 16, fontFamily: "Anton"),
+            ),
+          ),
         ),
         // home: ProductsOverviewPage(),
         routes: {
           AppPages.home: (ctx) => ProductsOverviewPage(),
           AppPages.productDetail: (ctx) => ProductDetailPage(),
           AppPages.productManager: (ctx) => ProductManagerPage(),
+          AppPages.productForm: (ctx) => ProductFormPage(),
           AppPages.cart: (ctx) => CartPage(),
           AppPages.orders: (ctx) => OrdersPage(),
         },
