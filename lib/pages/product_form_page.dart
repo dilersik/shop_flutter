@@ -32,7 +32,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Price'),
                 textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
               ),
               const SizedBox(height: 10),
               ElevatedButton(onPressed: () {}, child: const Text('Save')),
