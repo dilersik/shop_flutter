@@ -20,7 +20,7 @@ class ProductDetailPage extends StatelessWidget {
               SizedBox(height: 20),
               Text(product.name, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               SizedBox(height: 10),
-              Text('\$${product.price}', style: TextStyle(fontSize: 20, color: Colors.green)),
+              Text('\$${product.price.toStringAsFixed(2)}', style: TextStyle(fontSize: 20, color: Colors.green)),
               SizedBox(height: 10),
               Text(product.description, textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
             ],

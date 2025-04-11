@@ -6,6 +6,7 @@ import 'package:shop_flutter/pages/app_pages.dart';
 import 'package:shop_flutter/pages/cart_page.dart';
 import 'package:shop_flutter/pages/orders_page.dart';
 import 'package:shop_flutter/pages/product_detail_page.dart';
+import 'package:shop_flutter/pages/product_manager_page.dart';
 import 'package:shop_flutter/pages/products_overview_page.dart';
 
 import 'models/product_list.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple).copyWith(secondary: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple).copyWith(secondary: Colors.deepOrange, outline: Colors.grey.shade300),
           fontFamily: 'Lato',
           appBarTheme: const AppBarTheme(
             titleTextStyle: TextStyle(
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         routes: {
           AppPages.home: (ctx) => ProductsOverviewPage(),
           AppPages.productDetail: (ctx) => ProductDetailPage(),
+          AppPages.productManager: (ctx) => ProductManagerPage(),
           AppPages.cart: (ctx) => CartPage(),
           AppPages.orders: (ctx) => OrdersPage(),
         },

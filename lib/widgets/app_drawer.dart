@@ -13,7 +13,7 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Hello Friend!'),
             automaticallyImplyLeading: false,
           ),
-          const Divider(),
+          Divider(),
           ListTile(
             leading: const Icon(Icons.shop),
             title: const Text('Shop'),
@@ -22,13 +22,22 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context).pushNamed(AppPages.home);
             },
           ),
-          const Divider(),
+          Divider(color: Theme.of(context).colorScheme.outline),
           ListTile(
             leading: const Icon(Icons.payment),
             title: const Text('Orders'),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed(AppPages.orders);
+            },
+          ),
+          Divider(color: Theme.of(context).colorScheme.outline),
+          ListTile(
+            leading: const Icon(Icons.edit),
+            title: const Text('Manage Products'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AppPages.productManager);
             },
           ),
         ],
