@@ -37,7 +37,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     return 'Please enter a name';
                   }
                   if (name.length < 3) {
-                    return 'name must be at least 3 characters long';
+                    return 'Name must be at least 3 characters long';
                   }
                   return null;
                 },
@@ -48,6 +48,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 textInputAction: TextInputAction.newline,
+                validator: (value) {
+                  final description = value?.trim() ?? '';
+                  if (description.isEmpty) {
+                    return 'Please enter a description';
+                  }
+                  if (description.length < 10) {
+                    return 'Description must be at least 10 characters long';
+                  }
+                  return null;
+                },
                 onSaved: (value) => _formData['description'] = value ?? '',
               ),
               TextFormField(
@@ -80,7 +90,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       onFieldSubmitted: (_) => _submitForm(),
                       validator: (value) {
                         final url = value ?? '';
-                        if (url.isEmpty || !url.startsWith('http')) {
+                        if (url.isEmpty || !url.startsWith('http') || Uri.tryParse(url)?.hasAbsolutePath == false) {
                           return 'Please enter a valid URL';
                         }
                         if (!url.endsWith('.png') && !url.endsWith('.jpg') && !url.endsWith('.jpeg')) {
