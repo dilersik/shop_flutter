@@ -15,6 +15,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final _imageUrlController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _formData = <String, Object>{};
+  bool _isUpdate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
             padding: const EdgeInsets.all(8),
             children: [
               TextFormField(
+                initialValue: _formData['name']?.toString(),
                 decoration: const InputDecoration(labelText: 'Name'),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
@@ -47,23 +49,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 onSaved: (value) => _formData['name'] = value ?? '',
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Description'),
-                maxLines: 3,
-                keyboardType: TextInputType.multiline,
-                textInputAction: TextInputAction.newline,
-                validator: (value) {
-                  final description = value?.trim() ?? '';
-                  if (description.isEmpty) {
-                    return 'Please enter a description';
-                  }
-                  if (description.length < 10) {
-                    return 'Description must be at least 10 characters long';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _formData['description'] = value ?? '',
-              ),
-              TextFormField(
+                initialValue: _formData['price']?.toString(),
                 decoration: const InputDecoration(labelText: 'Price'),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -80,6 +66,24 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     _formData['price'] = price;
                   }
                 },
+              ),
+              TextFormField(
+                initialValue: _formData['description']?.toString(),
+                decoration: const InputDecoration(labelText: 'Description'),
+                maxLines: 3,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.newline,
+                validator: (value) {
+                  final description = value?.trim() ?? '';
+                  if (description.isEmpty) {
+                    return 'Please enter a description';
+                  }
+                  if (description.length < 10) {
+                    return 'Description must be at least 10 characters long';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _formData['description'] = value ?? '',
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -146,6 +150,24 @@ class _ProductFormPageState extends State<ProductFormPage> {
     super.dispose();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_formData.isEmpty) {
+      final product = ModalRoute.of(context)?.settings.arguments as Product?;
+      if (product != null) {
+        _isUpdate = true;
+        _formData['id'] = product.id;
+        _formData['name'] = product.name;
+        _formData['description'] = product.description;
+        _formData['price'] = product.price;
+        _formData['imageUrl'] = product.imageUrl;
+        _imageUrlController.text = product.imageUrl;
+      }
+    }
+  }
+
   void _updateImageUrl() {
     setState(() {});
   }
@@ -159,12 +181,19 @@ class _ProductFormPageState extends State<ProductFormPage> {
     _formKey.currentState?.save();
 
     final product = Product.fromJson(_formData);
+    final provider = Provider.of<ProductList>(context, listen: false);
 
-    Provider.of<ProductList>(context, listen: false).addProduct(product);
+    if (_isUpdate) {
+      provider.updateProduct(product);
+    } else {
+      provider.addProduct(product);
+    }
+
     Navigator.of(context).pop();
+
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: const Text('Product added successfully!'), duration: const Duration(seconds: 2)));
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: const Text('Product saved successfully!'), duration: const Duration(seconds: 2))
+    );
   }
 }

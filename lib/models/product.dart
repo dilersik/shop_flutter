@@ -18,8 +18,9 @@ class Product with ChangeNotifier {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    bool hasId = json.containsKey('id');
     return Product(
-      id: DateTime.now().toString(), // json['id'] as String,
+      id: hasId ? json['id'] as String : DateTime.now().toString(),
       name: json['name'] as String,
       description: json['description'] as String,
       price: (json['price'] as num).toDouble(),

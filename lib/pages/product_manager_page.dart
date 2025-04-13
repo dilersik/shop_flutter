@@ -28,11 +28,11 @@ class ProductManagerPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: ListView.builder(
-          itemCount: productList.productCount,
+          itemCount: productList.itemsCount,
           itemBuilder:
               (ctx, i) => Column(
                 children: [
-                  ProductManagerItemWidget(product: productList.products[i]),
+                  ProductManagerItemWidget(product: productList.items[i]),
                   Divider(color: Theme.of(context).colorScheme.outline),
                 ],
               ),

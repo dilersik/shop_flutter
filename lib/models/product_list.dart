@@ -3,17 +3,30 @@ import 'package:shop_flutter/data/dummy_data.dart';
 import 'package:shop_flutter/models/product.dart';
 
 class ProductList with ChangeNotifier {
-  final List<Product> _products = dummyProducts;
+  final List<Product> _allItems = dummyProducts;
 
-  List<Product> get products => [..._products]; // clone
-  List<Product> get favoriteProducts => _products.where((product) => product.isFavorite).toList();
+  List<Product> get items => [..._allItems]; // clone
+  List<Product> get favorites => _allItems.where((product) => product.isFavorite).toList();
 
   void addProduct(Product product) {
-    _products.add(product);
+    _allItems.add(product);
     notifyListeners();
   }
 
-  int get productCount => _products.length;
+  void updateProduct(Product product) {
+    final index = _allItems.indexWhere((p) => p.id == product.id);
+    if (index >= 0) {
+      _allItems[index] = product;
+      notifyListeners();
+    }
+  }
+
+  void removeProduct(Product product) {
+    _allItems.remove(product);
+    notifyListeners();
+  }
+
+  int get itemsCount => _allItems.length;
 }
 
 // List<Product> get products {
