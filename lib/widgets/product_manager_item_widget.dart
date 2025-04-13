@@ -26,9 +26,29 @@ class ProductManagerItemWidget extends StatelessWidget {
                 Navigator.of(context).pushNamed(AppPages.productForm, arguments: product);
               },
             ),
-            IconButton(icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error), onPressed: () {
-              Provider.of<ProductList>(context, listen: false).removeProduct(product);
-            }),
+            IconButton(
+              icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder:
+                      (ctx) => AlertDialog(
+                        title: const Text('Are you sure?'),
+                        content: const Text('Do you want to delete this product?'),
+                        actions: [
+                          TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('No')),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop(true);
+                              Provider.of<ProductList>(context, listen: false).removeProduct(product);
+                            },
+                            child: const Text('Yes'),
+                          ),
+                        ],
+                      ),
+                );
+              },
+            ),
           ],
         ),
       ),
