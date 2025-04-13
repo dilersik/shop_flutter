@@ -4,14 +4,14 @@ import 'package:shop_flutter/models/order.dart';
 import 'cart.dart';
 
 class OrderList with ChangeNotifier {
-  final List<Order> _allItems = [];
+  final List<Order> _items = [];
 
-  List<Order> get items => [..._allItems]; // clone
+  List<Order> get items => [..._items]; // clone
 
-  int get itemsCount => _allItems.length;
+  int get itemsCount => _items.length;
 
   void addOrder(Cart cart) {
-    _allItems.insert(
+    _items.insert(
       0,
       Order(
         id: DateTime.timestamp().toString(),

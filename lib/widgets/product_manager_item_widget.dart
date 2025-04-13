@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_flutter/models/product.dart';
 
+import '../models/product_list.dart';
 import '../pages/app_pages.dart';
 
 class ProductManagerItemWidget extends StatelessWidget {
@@ -24,7 +26,9 @@ class ProductManagerItemWidget extends StatelessWidget {
                 Navigator.of(context).pushNamed(AppPages.productForm, arguments: product);
               },
             ),
-            IconButton(icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error), onPressed: () {}),
+            IconButton(icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error), onPressed: () {
+              Provider.of<ProductList>(context, listen: false).removeProduct(product);
+            }),
           ],
         ),
       ),
