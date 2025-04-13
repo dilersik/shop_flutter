@@ -19,7 +19,7 @@ class Product with ChangeNotifier {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'] as String,
+      id: DateTime.now().toString(), // json['id'] as String,
       name: json['name'] as String,
       description: json['description'] as String,
       price: (json['price'] as num).toDouble(),

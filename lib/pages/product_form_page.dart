@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_flutter/models/product.dart';
+
+import '../models/product_list.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -28,7 +31,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
             padding: const EdgeInsets.all(8),
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'name'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                 validator: (value) {
@@ -93,9 +96,6 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         if (url.isEmpty || !url.startsWith('http') || Uri.tryParse(url)?.hasAbsolutePath == false) {
                           return 'Please enter a valid URL';
                         }
-                        if (!url.endsWith('.png') && !url.endsWith('.jpg') && !url.endsWith('.jpeg')) {
-                          return 'Please enter a valid image URL';
-                        }
                         return null;
                       },
                       onSaved: (value) => _formData['imageUrl'] = value ?? '',
@@ -108,13 +108,25 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 1)),
                     child:
                         _imageUrlController.text.isEmpty
-                            ? Text("Preview")
-                            : FittedBox(child: Image.network(_imageUrlController.text, fit: BoxFit.cover)),
+                            ? const Center(child: Text("Preview"))
+                            : Image.network(
+                              _imageUrlController.text,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return const Center(child: CircularProgressIndicator());
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(child: Icon(Icons.broken_image, size: 40, color: Colors.grey));
+                              },
+                            ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              ElevatedButton(onPressed: () {}, child: const Text('Save')),
+              const SizedBox(height: 30),
+              ElevatedButton(onPressed: _submitForm, child: const Text('Save')),
             ],
           ),
         ),
@@ -146,8 +158,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     _formKey.currentState?.save();
 
-    _formData['id'] = DateTime.now().toString();
     final product = Product.fromJson(_formData);
 
+    Provider.of<ProductList>(context, listen: false).addProduct(product);
+    Navigator.of(context).pop();
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: const Text('Product added successfully!'), duration: const Duration(seconds: 2)));
   }
 }
