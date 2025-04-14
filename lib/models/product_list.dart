@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_flutter/data/dummy_data.dart';
@@ -12,10 +14,23 @@ class ProductList with ChangeNotifier {
   List<Product> get favorites => _items.where((product) => product.isFavorite).toList();
 
   void addProduct(Product product) {
-    http.post(Uri.parse('$baseURL/products.json'), body: product.toJson());
+    http
+        .post(Uri.parse('$baseURL/products.json'), body: product.toJson())
+        .then((response) {
+          final id = jsonDecode(response.body)['name'];
 
-    _items.add(product);
-    notifyListeners();
+          _items.add(Product(
+            id: id,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            imageUrl: product.imageUrl,
+          ));
+          notifyListeners();
+        })
+        .catchError((error) {
+
+        });
   }
 
   void updateProduct(Product product) {

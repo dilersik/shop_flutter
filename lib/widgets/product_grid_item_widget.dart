@@ -51,7 +51,17 @@ class ProductGridItemWidget extends StatelessWidget {
           ),
         ),
         child: GestureDetector(
-          child: Image.network(product.imageUrl, fit: BoxFit.cover),
+          child: Image.network(
+            product.imageUrl,
+            fit: BoxFit.cover,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return const Center(child: CircularProgressIndicator());
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return const Center(child: Icon(Icons.broken_image, size: 40, color: Colors.grey));
+            },
+          ),
           onTap: () {
             Navigator.of(context).pushNamed(AppPages.productDetail, arguments: product);
           },
