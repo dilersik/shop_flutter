@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shop_flutter/data/dummy_data.dart';
 import 'package:shop_flutter/models/product.dart';
 
 class ProductList with ChangeNotifier {
+  final baseURL = 'https://shop-flutter-8d4e3-default-rtdb.firebaseio.com';
+
   final List<Product> _items = dummyProducts;
 
   List<Product> get items => [..._items]; // clone
   List<Product> get favorites => _items.where((product) => product.isFavorite).toList();
 
   void addProduct(Product product) {
+    http.post(Uri.parse('$baseURL/products.json'), body: product.toJson());
+
     _items.add(product);
     notifyListeners();
   }
