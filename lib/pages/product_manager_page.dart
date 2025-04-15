@@ -25,19 +25,43 @@ class ProductManagerPage extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: productList.itemsCount,
-          itemBuilder:
-              (ctx, i) => Column(
-                children: [
-                  ProductManagerItemWidget(product: productList.items[i]),
-                  Divider(color: Theme.of(context).colorScheme.outline),
-                ],
-              ),
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListView.builder(
+            itemCount: productList.itemsCount,
+            itemBuilder:
+                (ctx, i) => Column(
+                  children: [
+                    ProductManagerItemWidget(product: productList.items[i]),
+                    Divider(color: Theme.of(context).colorScheme.outline),
+                  ],
+                ),
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> _refreshProducts(BuildContext context) async {
+    try {
+      await Provider.of<ProductList>(context, listen: false).loadProducts();
+    } catch (error) {
+      if (!context.mounted) return;
+      await showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("An error occurred!"),
+          content: const Text("Something went wrong!"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text("Okay"),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
