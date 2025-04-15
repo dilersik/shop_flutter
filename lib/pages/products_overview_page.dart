@@ -5,6 +5,7 @@ import 'package:shop_flutter/widgets/app_drawer.dart';
 import 'package:shop_flutter/widgets/badge_widget.dart';
 
 import '../models/cart.dart';
+import '../models/product_list.dart';
 import '../widgets/product_grid_widget.dart';
 
 enum FilterOptions { favorites, all }
@@ -18,11 +19,10 @@ class ProductsOverviewPage extends StatefulWidget {
 
 class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
   bool _showFavoritesOnly = false;
+  bool _isLoading = true;
 
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<ProductList>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('MyShop'),
@@ -60,8 +60,29 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
           ),
         ],
       ),
-      body: ProductGridWidget(showFavoritesOnly: _showFavoritesOnly),
+      body:
+          _isLoading
+              ? Center(child: CircularProgressIndicator())
+              : ProductGridWidget(showFavoritesOnly: _showFavoritesOnly),
       drawer: AppDrawer(),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final provider = Provider.of<ProductList>(context, listen: false);
+    provider
+        .loadProducts()
+        .then((onValue) {
+          setState(() => _isLoading = false);
+        })
+        .catchError((error) {
+          setState(() => _isLoading = false);
+          if (!mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: const Text('Error loading products'), duration: const Duration(seconds: 3)));
+        });
   }
 }

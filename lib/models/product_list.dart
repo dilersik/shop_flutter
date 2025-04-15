@@ -2,19 +2,40 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shop_flutter/data/dummy_data.dart';
 import 'package:shop_flutter/models/product.dart';
 
 class ProductList with ChangeNotifier {
-  final baseURL = 'https://shop-flutter-8d4e3-default-rtdb.firebaseio.com';
+  final url = 'https://shop-flutter-8d4e3-default-rtdb.firebaseio.com/products.json';
 
-  final List<Product> _items = dummyProducts;
+  final List<Product> _items = [];
 
   List<Product> get items => [..._items]; // clone
   List<Product> get favorites => _items.where((product) => product.isFavorite).toList();
 
+  Future<void> loadProducts() async {
+    final response = await http.get(Uri.parse(url));
+    if (response.body == 'null') return;
+
+    final Map<String, dynamic> data = jsonDecode(response.body);
+
+    if (data.isEmpty) return;
+
+    _items.clear();
+    data.forEach((id, productData) {
+      _items.add(Product(
+        id: id,
+        name: productData['name'],
+        description: productData['description'],
+        price: productData['price'],
+        imageUrl: productData['imageUrl'],
+        isFavorite: productData['isFavorite'] ?? false,
+      ));
+    });
+    notifyListeners();
+  }
+
   Future<void> addProduct(Product product) async {
-    final response = await http.post(Uri.parse('$baseURL/products.json'), body: product.toJson());
+    final response = await http.post(Uri.parse(url), body: product.toJson());
     final id = jsonDecode(response.body)['name'];
 
     _items.add(Product(
