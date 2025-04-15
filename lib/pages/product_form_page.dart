@@ -181,7 +181,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setState(() {});
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     final isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) {
       return;
@@ -195,35 +195,33 @@ class _ProductFormPageState extends State<ProductFormPage> {
     final provider = Provider.of<ProductList>(context, listen: false);
     Future result = Future.value();
 
-    if (_isUpdate) {
-      result = provider.updateProduct(product);
-    } else {
-      result = provider.addProduct(product);
+    try {
+      if (_isUpdate) {
+        result = provider.updateProduct(product);
+      } else {
+        result = provider.addProduct(product);
+      }
+
+      await result;
+
+      if (!mounted) {
+        return;
+      }
+
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: const Text('Product saved successfully!'), duration: const Duration(seconds: 2)),
+      );
+
+    } catch (error) {
+      showDialog(context: context, builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text('Failed to save product: $error.\r\nPlease try again later.'),
+        actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
+      ));
+    } finally {
+      setState(() => _isLoading = false);
     }
-
-    result
-        .then((response) {
-          if (!mounted) {
-            return;
-          }
-          setState(() => _isLoading = false);
-          Navigator.of(context).pop();
-
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: const Text('Product saved successfully!'), duration: const Duration(seconds: 2)),
-          );
-        })
-        .catchError((onError) {
-          setState(() => _isLoading = false);
-          if (!mounted) {
-            return;
-          }
-          showDialog(context: context, builder: (context) => AlertDialog(
-            title: const Text('Error'),
-            content: Text('Failed to save product: $onError.\r\nPlease try again later.'),
-            actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
-          ));
-        });
   }
 }

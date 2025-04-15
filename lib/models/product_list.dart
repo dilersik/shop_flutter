@@ -13,24 +13,21 @@ class ProductList with ChangeNotifier {
   List<Product> get items => [..._items]; // clone
   List<Product> get favorites => _items.where((product) => product.isFavorite).toList();
 
-  Future<void> addProduct(Product product) {
-    return http
-        .post(Uri.parse('$baseURL/products.json'), body: product.toJson())
-        .then((response) {
-          final id = jsonDecode(response.body)['name'];
+  Future<void> addProduct(Product product) async {
+    final response = await http.post(Uri.parse('$baseURL/products.json'), body: product.toJson());
+    final id = jsonDecode(response.body)['name'];
 
-          _items.add(Product(
-            id: id,
-            name: product.name,
-            description: product.description,
-            price: product.price,
-            imageUrl: product.imageUrl,
-          ));
-          notifyListeners();
-        });
+    _items.add(Product(
+      id: id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    ));
+    notifyListeners();
   }
 
-  Future<void> updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     final index = _items.indexWhere((p) => p.id == product.id);
     if (index >= 0) {
       _items[index] = product;
