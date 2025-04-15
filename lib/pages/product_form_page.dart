@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter/models/product.dart';
@@ -214,11 +216,14 @@ class _ProductFormPageState extends State<ProductFormPage> {
         })
         .catchError((onError) {
           setState(() => _isLoading = false);
-          AlertDialog(
+          if (!mounted) {
+            return;
+          }
+          showDialog(context: context, builder: (context) => AlertDialog(
             title: const Text('Error'),
-            content: Text('Failed to save product: $onError. Please try again later.'),
+            content: Text('Failed to save product: $onError.\r\nPlease try again later.'),
             actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
-          );
+          ));
         });
   }
 }
