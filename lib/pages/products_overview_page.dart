@@ -80,9 +80,9 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
         .catchError((error) {
           setState(() => _isLoading = false);
           if (!mounted) return;
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: const Text('Error loading products'), duration: const Duration(seconds: 3)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error loading products: $error'), duration: const Duration(seconds: 3)),
+          );
         });
   }
 }
