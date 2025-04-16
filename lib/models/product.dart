@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_flutter/utils/Constants.dart';
 
-import '../exceptions/http_exception.dart';
-
 class Product with ChangeNotifier {
   final String id;
   final String name;
@@ -40,12 +38,11 @@ class Product with ChangeNotifier {
       body: jsonEncode({'isFavorite': !isFavorite}),
     );
 
-    if (response.statusCode < 400) {
-      isFavorite = !isFavorite;
-      notifyListeners();
-    } else {
-      throw HttpException(response.body, response.statusCode);
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load orders');
     }
+    isFavorite = !isFavorite;
+    notifyListeners();
   }
 
   toJson() {

@@ -40,7 +40,7 @@ class CartPage extends StatelessWidget {
           ListTile(
             title: const Text('Total'),
             trailing: Chip(
-              label: Text("R\$ ${cart.totalAmount}", style: TextStyle(color: Colors.white)),
+              label: Text("R\$ ${cart.total}", style: TextStyle(color: Colors.white)),
               backgroundColor: Theme.of(context).primaryColor,
             ), // Replace with your total price
           ),

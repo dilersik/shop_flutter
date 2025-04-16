@@ -13,7 +13,7 @@ class Cart with ChangeNotifier {
 
   int get itemsCount => _items.length;
 
-  double get totalAmount {
+  double get total {
     double total = 0.0;
     _items.forEach((key, cartItem) {
       total += cartItem.price * cartItem.quantity;
@@ -90,8 +90,8 @@ class Cart with ChangeNotifier {
                 'price': cartItem.price,
               })
           .toList(),
-      'totalAmount': totalAmount,
-      'date': datetime.toIso8601String(),
+      'total': total,
+      'datetime': datetime.toIso8601String(),
     });
   }
 }

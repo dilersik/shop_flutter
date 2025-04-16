@@ -12,4 +12,14 @@ class CartItem {
     required this.quantity,
     required this.price,
   });
+
+  static CartItem fromJson(item) {
+    return CartItem(
+      id: item['id'],
+      productId: item['productId'],
+      name: item['name'],
+      quantity: item['quantity'],
+      price: item['price'],
+    );
+  }
 }
