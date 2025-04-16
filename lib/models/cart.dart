@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shop_flutter/models/product.dart';
 
 import 'cart_item.dart';
 
 class Cart with ChangeNotifier {
+  DateTime datetime = DateTime.now();
   final Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items => {..._items}; // clone
@@ -34,7 +37,7 @@ class Cart with ChangeNotifier {
       _items.putIfAbsent(
         product.id,
         () => CartItem(
-          id: DateTime.now().toString(),
+          id: DateTime.timestamp().toString(),
           productId: product.id,
           name: product.name,
           quantity: 1,
@@ -74,5 +77,21 @@ class Cart with ChangeNotifier {
   void clear() {
     _items.clear();
     notifyListeners();
+  }
+
+  toJson() {
+    return jsonEncode({
+      'items': _items.values
+          .map((cartItem) => {
+                'id': cartItem.id,
+                'productId': cartItem.productId,
+                'name': cartItem.name,
+                'quantity': cartItem.quantity,
+                'price': cartItem.price,
+              })
+          .toList(),
+      'totalAmount': totalAmount,
+      'date': datetime.toIso8601String(),
+    });
   }
 }

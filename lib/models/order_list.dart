@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shop_flutter/models/order.dart';
+import 'package:shop_flutter/utils/Constants.dart';
 
 import 'cart.dart';
 
@@ -10,14 +12,20 @@ class OrderList with ChangeNotifier {
 
   int get itemsCount => _items.length;
 
-  void addOrder(Cart cart) {
+  Future<void> addOrder(Cart cart) async {
+    cart.datetime = DateTime.now();
+    await http.post(
+      Uri.parse('${Constants.ordersBaseUrl}.json'),
+      body: cart.toJson(),
+    );
+
     _items.insert(
       0,
       Order(
         id: DateTime.timestamp().toString(),
         total: cart.totalAmount,
         items: cart.items.values.toList(),
-        dateTime: DateTime.now(),
+        dateTime: cart.datetime,
       ),
     );
     notifyListeners();

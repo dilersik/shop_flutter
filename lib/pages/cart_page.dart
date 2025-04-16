@@ -44,18 +44,41 @@ class CartPage extends StatelessWidget {
               backgroundColor: Theme.of(context).primaryColor,
             ), // Replace with your total price
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () {
-                orderList.addOrder(cart);
-                cart.clear();
-              },
-              child: const Text('Checkout'),
-            ),
-          ),
+          Padding(padding: const EdgeInsets.all(8.0), child: _CartButton(cart: cart, orderList: orderList)),
         ],
       ),
     );
+  }
+}
+
+class _CartButton extends StatefulWidget {
+  const _CartButton({super.key, required this.cart, required this.orderList});
+
+  final Cart cart;
+  final OrderList orderList;
+
+  @override
+  State<_CartButton> createState() => _CartButtonState();
+}
+
+class _CartButtonState extends State<_CartButton> {
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? CircularProgressIndicator()
+        : ElevatedButton(
+          onPressed:
+              widget.cart.itemsCount == 0
+                  ? null
+                  : () async {
+                    setState(() => _isLoading = true);
+                    await widget.orderList.addOrder(widget.cart);
+                    widget.cart.clear();
+                    setState(() => _isLoading = false);
+                  },
+          child: const Text('Checkout'),
+        );
   }
 }
