@@ -3,12 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_flutter/models/product.dart';
+import 'package:shop_flutter/utils/Constants.dart';
 
 import '../exceptions/http_exception.dart';
 
 class ProductList with ChangeNotifier {
-  final _baseUrl = 'https://shop-flutter-8d4e3-default-rtdb.firebaseio.com';
-
   final List<Product> _items = [];
 
   List<Product> get items => [..._items]; // clone
@@ -16,8 +15,8 @@ class ProductList with ChangeNotifier {
 
   int get itemsCount => _items.length;
 
-  Uri _parseUrlWith(Product product) => Uri.parse('$_baseUrl/products/${product.id}.json');
-  Uri _parseUrl() => Uri.parse('$_baseUrl/products.json');
+  Uri _parseUrlWith(Product product) => Uri.parse('${Constants.productBaseUrl}/${product.id}.json');
+  Uri _parseUrl() => Uri.parse('${Constants.productBaseUrl}.json');
 
   Future<void> loadProducts() async {
     final response = await http.get(_parseUrl());

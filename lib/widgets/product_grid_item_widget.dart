@@ -21,8 +21,19 @@ class ProductGridItemWidget extends StatelessWidget {
             builder:
                 (ctx, product, child) => IconButton(
                   icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
-                  onPressed: () {
-                    product.toggleFavorite();
+                  onPressed: () async {
+                    try {
+                      await product.toggleFavorite();
+                    } catch (error) {
+                      if (context.mounted) return;
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Error toggling favorite!'),
+                          duration: const Duration(seconds: 3),
+                        ),
+                      );
+                    }
                   },
                   color: Theme.of(context).colorScheme.secondary,
                 ),
