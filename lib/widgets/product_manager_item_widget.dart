@@ -12,6 +12,8 @@ class ProductManagerItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ProductList>(context, listen: false);
+
     return ListTile(
       leading: CircleAvatar(backgroundImage: NetworkImage(product.imageUrl)),
       title: Text(product.name),
@@ -38,9 +40,32 @@ class ProductManagerItemWidget extends StatelessWidget {
                         actions: [
                           TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('No')),
                           TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               Navigator.of(ctx).pop(true);
-                              Provider.of<ProductList>(context, listen: false).removeProduct(product);
+                              try {
+                                await provider.removeProduct(product);
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text('Product deleted successfully!'),
+                                    duration: const Duration(seconds: 3),
+                                    action: SnackBarAction(
+                                      label: 'Undo',
+                                      onPressed: () async {
+                                        await provider.addProduct(product);
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } catch (error) {
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Error deleting product: ${error.toString()}'),
+                                    duration: const Duration(seconds: 3),
+                                  ),
+                                );
+                              }
                             },
                             child: const Text('Yes'),
                           ),

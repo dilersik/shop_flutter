@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_flutter/models/product.dart';
 
+import '../exceptions/http_exception.dart';
+
 class ProductList with ChangeNotifier {
   final _baseUrl = 'https://shop-flutter-8d4e3-default-rtdb.firebaseio.com';
 
@@ -71,6 +73,8 @@ class ProductList with ChangeNotifier {
       final response = await http.delete(_parseUrlWith(product));
       if (response.statusCode < 400) {
         _items.removeAt(index);
+      } else {
+        throw HttpException(response.body, response.statusCode);
       }
       notifyListeners();
     }
