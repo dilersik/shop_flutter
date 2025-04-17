@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shop_flutter/models/order.dart';
-import 'package:shop_flutter/utils/Constants.dart';
+import 'package:shop_flutter/utils/constants.dart';
 
 import 'cart.dart';
 import 'cart_item.dart';

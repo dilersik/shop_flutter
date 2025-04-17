@@ -52,7 +52,7 @@ class CartPage extends StatelessWidget {
 }
 
 class _CartButton extends StatefulWidget {
-  const _CartButton({super.key, required this.cart, required this.orderList});
+  const _CartButton({required this.cart, required this.orderList});
 
   final Cart cart;
   final OrderList orderList;
