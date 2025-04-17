@@ -4,47 +4,43 @@ import 'package:shop_flutter/models/order_list.dart';
 import 'package:shop_flutter/widgets/app_drawer.dart';
 import 'package:shop_flutter/widgets/order_widget.dart';
 
-class OrdersPage extends StatefulWidget {
+class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
 
-  @override
-  State<OrdersPage> createState() => _OrdersPageState();
-}
-
-class _OrdersPageState extends State<OrdersPage> {
-  bool _isLoading = true;
+  // requires StatefulWidget
+  // bool _isLoading = true;
 
   @override
   Widget build(BuildContext context) {
-    final OrderList orderList = Provider.of<OrderList>(context);
+    final OrderList orderList = Provider.of<OrderList>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(title: Text('Orders')),
       drawer: AppDrawer(),
-      body:
-          _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                itemBuilder: (ctx, i) => OrderWidget(order: orderList.items[i]),
-                itemCount: orderList.items.length,
-              ),
+      body: FutureBuilder(
+        future: orderList.loadOrders(),
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Failed to load orders: ${snapshot.error}.'));
+          } else {
+            return Consumer<OrderList>(
+              builder:
+                  (ctx, orders, child) => ListView.builder(
+                    itemBuilder: (ctx, i) => OrderWidget(order: orderList.items[i]),
+                    itemCount: orderList.items.length,
+                  ),
+            );
+          }
+        },
+      ),
+      //     _isLoading
+      //         ? Center(child: CircularProgressIndicator())
+      //         : ListView.builder(
+      //           itemBuilder: (ctx, i) => OrderWidget(order: orderList.items[i]),
+      //           itemCount: orderList.items.length,
+      //         ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<OrderList>(context, listen: false).loadOrders().then((_) {
-      setState(() => _isLoading = false);
-    }).catchError((error) {
-      setState(() => _isLoading = false);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to load orders: $error.'),
-          duration: Duration(seconds: 5),
-        ),
-      );
-    });
   }
 }
