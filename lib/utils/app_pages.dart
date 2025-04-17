@@ -1,5 +1,6 @@
 class AppPages {
-  static const home = '/';
+  static const auth = '/';
+  static const home = '/home';
   static const productDetail = '/product-detail';
   static const productManager = '/product-manager';
   static const productForm = '/product-form';

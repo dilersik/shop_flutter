@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shop_flutter/pages/app_pages.dart';
+import 'package:shop_flutter/utils/app_pages.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});

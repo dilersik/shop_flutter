@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_flutter/models/product.dart';
 
 import '../models/product_list.dart';
-import '../pages/app_pages.dart';
+import '../utils/app_pages.dart';
 
 class ProductManagerItemWidget extends StatelessWidget {
   final Product product;
