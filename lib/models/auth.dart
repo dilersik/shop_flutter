@@ -9,23 +9,14 @@ class Auth with ChangeNotifier {
   static const String _baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:';
 
   String? _token;
+  String? _email;
   DateTime? _expiryDate;
   String? _userId;
 
-  bool get isAuth {
-    return token != null;
-  }
-
-  get token {
-    if (_expiryDate != null && _expiryDate?.isAfter(DateTime.now()) == true && _token != null) {
-      return _token;
-    }
-    return null;
-  }
-
-  get userId {
-    return _userId;
-  }
+  get token => isAuth ? _token : null;
+  get email => isAuth ? _email : null;
+  get userId => isAuth ? _userId : null;
+  bool get isAuth => _token != null && _expiryDate?.isAfter(DateTime.now()) == true ? true : false;
 
   Future<void> _authenticate(String email, String password, String urlSegment) async {
     final response = await post(
@@ -43,6 +34,7 @@ class Auth with ChangeNotifier {
     }
 
     _token = responseData['idToken'];
+    _email = responseData['email'];
     _userId = responseData['localId'];
     _expiryDate = DateTime.now().add(Duration(seconds: int.parse(responseData['expiresIn'])));
     notifyListeners();

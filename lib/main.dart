@@ -3,13 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:shop_flutter/models/auth.dart';
 import 'package:shop_flutter/models/cart.dart';
 import 'package:shop_flutter/models/order_list.dart';
-import 'package:shop_flutter/pages/auth_page.dart';
+import 'package:shop_flutter/pages/auth_or_home_page.dart';
 import 'package:shop_flutter/pages/cart_page.dart';
 import 'package:shop_flutter/pages/orders_page.dart';
 import 'package:shop_flutter/pages/product_detail_page.dart';
 import 'package:shop_flutter/pages/product_form_page.dart';
 import 'package:shop_flutter/pages/product_manager_page.dart';
-import 'package:shop_flutter/pages/products_overview_page.dart';
 import 'package:shop_flutter/utils/app_pages.dart';
 
 import 'models/product_list.dart';
@@ -61,8 +60,7 @@ class MyApp extends StatelessWidget {
         ),
         // home: ProductsOverviewPage(),
         routes: {
-          AppPages.auth: (ctx) => AuthPage(),
-          AppPages.home: (ctx) => ProductsOverviewPage(),
+          AppPages.authOrHome: (ctx) => AuthOrHomePage(),
           AppPages.productDetail: (ctx) => ProductDetailPage(),
           AppPages.productManager: (ctx) => ProductManagerPage(),
           AppPages.productForm: (ctx) => ProductFormPage(),
