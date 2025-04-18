@@ -99,12 +99,33 @@ class _AuthFormState extends State<AuthForm> {
     setState(() => _isLoading = true);
     _formKey.currentState?.save();
 
-    if (_isLogin()) {
-    } else {
-      await provider.signup(_authData['email']!, _authData['password']!);
+    try {
+      if (_isLogin()) {
+        await provider.login(_authData['email']!, _authData['password']!);
+      } else {
+        await provider.signup(_authData['email']!, _authData['password']!);
+      }
+    } catch (error) {
+      _showErrorDialog(error.toString());
     }
 
     setState(() => _isLoading = false);
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('An error occurred!'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Okay'),
+            onPressed: () => Navigator.of(ctx).pop(),
+          ),
+        ],
+      ),
+    );
   }
 }
 
