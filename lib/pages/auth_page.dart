@@ -12,25 +12,37 @@ class AuthPage extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color.fromARGB(255, 255, 128, 0), Color.fromARGB(255, 255, 0, 0)],
+                colors: [
+                  Color.fromARGB(255, 255, 128, 0),
+                  Color.fromARGB(255, 255, 0, 0)
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
           ),
-          SizedBox(
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  'MyShop',
-                  style: TextStyle(fontSize: 45, fontFamily: 'Anton', color: Colors.white, fontWeight: FontWeight.bold),
+          SafeArea(
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'MyShop',
+                      style: TextStyle(
+                        fontSize: 45,
+                        fontFamily: 'Anton',
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    AuthForm(),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                AuthForm()
-              ],
+              ),
             ),
           ),
         ],
@@ -38,3 +50,4 @@ class AuthPage extends StatelessWidget {
     );
   }
 }
+

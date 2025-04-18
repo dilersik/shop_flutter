@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/auth.dart';
 import '../utils/validator.dart';
 
 class AuthForm extends StatefulWidget {
@@ -18,6 +20,7 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Auth>(context, listen: false);
     final deviceSize = MediaQuery.of(context).size;
 
     return Card(
@@ -57,7 +60,7 @@ class _AuthFormState extends State<AuthForm> {
                   obscureText: true,
                   onSaved: (value) => _authData['confirmPassword'] = value ?? '',
                   validator: (value) {
-                    if (value != _authData['password']) {
+                    if (value != _passwordController.text) {
                       return 'Passwords do not match';
                     }
                     return null;
@@ -67,7 +70,10 @@ class _AuthFormState extends State<AuthForm> {
               if (_isLoading)
                 const CircularProgressIndicator()
               else
-                ElevatedButton(onPressed: _submit, child: Text(_isLogin() ? 'Login' : 'Signup')),
+                ElevatedButton(
+                  onPressed: () => _submit(provider),
+                  child: Text(_isLogin() ? 'Login' : 'Signup'),
+                ),
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () => _authModeToggle(),
@@ -86,7 +92,7 @@ class _AuthFormState extends State<AuthForm> {
 
   void _authModeToggle() => setState(() => _authMode = _isLogin() ? _AuthMode.signup : _AuthMode.login);
 
-  void _submit() {
+  Future<void> _submit(Auth provider) async {
     final isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) return;
 
@@ -94,7 +100,9 @@ class _AuthFormState extends State<AuthForm> {
     _formKey.currentState?.save();
 
     if (_isLogin()) {
-    } else {}
+    } else {
+      await provider.signup(_authData['email']!, _authData['password']!);
+    }
 
     setState(() => _isLoading = false);
   }
