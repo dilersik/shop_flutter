@@ -9,18 +9,20 @@ import 'cart.dart';
 import 'cart_item.dart';
 
 class OrderList with ChangeNotifier {
-  final List<Order> _items = [];
+  final String _authToken;
+  List<Order> _items = [];
 
   List<Order> get items => [..._items]; // clone
 
   int get itemsCount => _items.length;
 
+  OrderList(this._authToken, this._items);
+
+  Uri parseUrl() => Uri.parse('${Constants.ordersBaseUrl}.json?auth=$_authToken');
+
   Future<void> addOrder(Cart cart) async {
     cart.datetime = DateTime.now();
-    await http.post(
-      Uri.parse('${Constants.ordersBaseUrl}.json'),
-      body: cart.toJson(),
-    );
+    await http.post(parseUrl(), body: cart.toJson());
 
     _items.insert(
       0,
@@ -35,7 +37,8 @@ class OrderList with ChangeNotifier {
   }
 
   Future<void> loadOrders() async {
-    final response = await http.get(Uri.parse('${Constants.ordersBaseUrl}.json'));
+    List<Order> items = [];
+    final response = await http.get(parseUrl());
     if (response.statusCode != 200) {
       throw Exception('Failed to load orders');
     }
@@ -43,15 +46,19 @@ class OrderList with ChangeNotifier {
       throw Exception('No orders found');
     }
     final Map<String, dynamic> data = jsonDecode(response.body);
-    _items.clear();
+    items.clear();
     data.forEach((orderId, orderData) {
-      _items.add(Order(
-        id: orderId,
-        total: orderData['total'],
-        items: (orderData['items'] as List<dynamic>).map((item) => CartItem.fromJson(item)).toList(),
-        dateTime: DateTime.parse(orderData['datetime']),
-      ));
+      items.add(
+        Order(
+          id: orderId,
+          total: orderData['total'],
+          items: (orderData['items'] as List<dynamic>).map((item) => CartItem.fromJson(item)).toList(),
+          dateTime: DateTime.parse(orderData['datetime']),
+        ),
+      );
     });
+
+    _items = items.reversed.toList();
     notifyListeners();
   }
 }
