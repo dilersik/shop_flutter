@@ -25,7 +25,7 @@ class ProductGridItemWidget extends StatelessWidget {
                   icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
                   onPressed: () async {
                     try {
-                      await product.toggleFavorite(auth.token);
+                      await product.toggleFavorite(auth.token, auth.userId);
                     } catch (error) {
                       if (context.mounted) return;
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();

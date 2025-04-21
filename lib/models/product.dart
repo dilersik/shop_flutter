@@ -32,10 +32,10 @@ class Product with ChangeNotifier {
     );
   }
 
-  Future<void> toggleFavorite(String token) async {
-    final response = await http.patch(
-      Uri.parse('${Constants.productBaseUrl}/$id.json?auth=$token'),
-      body: jsonEncode({'isFavorite': !isFavorite}),
+  Future<void> toggleFavorite(String token, String userId) async {
+    final response = await http.put(
+      Uri.parse('${Constants.userFavoriteBaseUrl}/$userId/$id.json?auth=$token'),
+      body: jsonEncode(isFavorite),
     );
 
     if (response.statusCode != 200) {
@@ -50,8 +50,7 @@ class Product with ChangeNotifier {
       'name': name,
       'description': description,
       'price': price,
-      'imageUrl': imageUrl,
-      'isFavorite': isFavorite,
+      'imageUrl': imageUrl
     });
   }
 }
