@@ -16,7 +16,7 @@ class OrderList with ChangeNotifier {
 
   int get itemsCount => _items.length;
 
-  OrderList(this._authToken, this._items);
+  OrderList([this._authToken = '', this._items = const []]);
 
   Uri parseUrl() => Uri.parse('${Constants.ordersBaseUrl}.json?auth=$_authToken');
 
