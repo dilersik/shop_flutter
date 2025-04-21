@@ -10,15 +10,16 @@ import 'cart_item.dart';
 
 class OrderList with ChangeNotifier {
   final String _authToken;
+  final String _userId;
   List<Order> _items = [];
 
   List<Order> get items => [..._items]; // clone
 
   int get itemsCount => _items.length;
 
-  OrderList([this._authToken = '', this._items = const []]);
+  OrderList([this._authToken = '', this._userId = '', this._items = const []]);
 
-  Uri parseUrl() => Uri.parse('${Constants.ordersBaseUrl}.json?auth=$_authToken');
+  Uri parseUrl() => Uri.parse('${Constants.ordersBaseUrl}/$_userId.json?auth=$_authToken');
 
   Future<void> addOrder(Cart cart) async {
     cart.datetime = DateTime.now();
