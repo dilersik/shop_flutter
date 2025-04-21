@@ -8,15 +8,17 @@ import 'package:shop_flutter/utils/constants.dart';
 import '../exceptions/http_exception.dart';
 
 class ProductList with ChangeNotifier {
-  final List<Product> _items = [];
-
+  final String _authToken;
+  final List<Product> _items;
   List<Product> get items => [..._items]; // clone
   List<Product> get favorites => _items.where((product) => product.isFavorite).toList();
 
   int get itemsCount => _items.length;
 
-  Uri _parseUrlWith(Product product) => Uri.parse('${Constants.productBaseUrl}/${product.id}.json');
-  Uri _parseUrl() => Uri.parse('${Constants.productBaseUrl}.json');
+  Uri _parseUrlWith(Product product) => Uri.parse('${Constants.productBaseUrl}/${product.id}.json?auth=$_authToken');
+  Uri _parseUrl() => Uri.parse('${Constants.productBaseUrl}.json?auth=$_authToken');
+
+  ProductList(this._authToken, this._items);
 
   Future<void> loadProducts() async {
     final response = await http.get(_parseUrl());
