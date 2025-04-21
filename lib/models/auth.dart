@@ -50,6 +50,7 @@ class Auth with ChangeNotifier {
 
   Future<void> logout() async {
     _token = null;
+    _email = null;
     _expiryDate = null;
     _userId = null;
     notifyListeners();
