@@ -65,30 +65,30 @@ class _AuthFormWidgetState extends State<AuthFormWidget> with SingleTickerProvid
                 onSaved: (value) => _authData['password'] = value ?? '',
                 validator: (value) => _isLogin() ? null : Validator.validatePassword(value),
               ),
-              const SizedBox(height: 20),
-              // if (_isSignup())
-              AnimatedContainer(
-                constraints: BoxConstraints(minHeight: _isLogin() ? 0 : 60, maxHeight: _isLogin() ? 0 : 120),
-                duration: Duration(milliseconds: 300),
-                curve: Curves.linear,
-                child: FadeTransition(
-                  opacity: _opacityAnimation!,
-                  child: SlideTransition(
-                    position: _slideAnimation!,
-                    child: TextFormField(
-                      decoration: const InputDecoration(labelText: 'Confirm Password'),
-                      obscureText: true,
-                      onSaved: (value) => _authData['confirmPassword'] = value ?? '',
-                      validator: (value) {
-                        if (value != _passwordController.text) {
-                          return 'Passwords do not match';
-                        }
-                        return null;
-                      },
+              if (_isSignup())
+                AnimatedContainer(
+                  padding: const EdgeInsets.only(top: 20),
+                  constraints: BoxConstraints(minHeight: _isLogin() ? 0 : 60, maxHeight: _isLogin() ? 0 : 120),
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.linear,
+                  child: FadeTransition(
+                    opacity: _opacityAnimation!,
+                    child: SlideTransition(
+                      position: _slideAnimation!,
+                      child: TextFormField(
+                        decoration: const InputDecoration(labelText: 'Confirm Password'),
+                        obscureText: true,
+                        onSaved: (value) => _authData['confirmPassword'] = value ?? '',
+                        validator: (value) {
+                          if (value != _passwordController.text) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
               const SizedBox(height: 20),
               if (_isLoading)
                 const CircularProgressIndicator()

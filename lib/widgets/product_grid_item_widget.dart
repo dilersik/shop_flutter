@@ -30,10 +30,7 @@ class ProductGridItemWidget extends StatelessWidget {
                       if (context.mounted) return;
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('Error toggling favorite!'),
-                          duration: const Duration(seconds: 3),
-                        ),
+                        SnackBar(content: const Text('Error toggling favorite!'), duration: const Duration(seconds: 3)),
                       );
                     }
                   },
@@ -64,16 +61,10 @@ class ProductGridItemWidget extends StatelessWidget {
           ),
         ),
         child: GestureDetector(
-          child: Image.network(
-            product.imageUrl,
+          child: FadeInImage(
+            placeholder: AssetImage("assets/images/placeholder.jpeg"),
+            image: NetworkImage(product.imageUrl),
             fit: BoxFit.cover,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return const Center(child: CircularProgressIndicator());
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return const Center(child: Icon(Icons.broken_image, size: 40, color: Colors.grey));
-            },
           ),
           onTap: () {
             Navigator.of(context).pushNamed(AppPages.productDetail, arguments: product);
