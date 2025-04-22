@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../models/auth.dart';
 import '../utils/validator.dart';
 
+const double _defaultHeight = 360;
+
 class AuthForm extends StatefulWidget {
   const AuthForm({super.key});
 
@@ -11,12 +13,14 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
+  final Map<String, String> _authData = {'email': '', 'password': ''};
   _AuthMode _authMode = _AuthMode.login;
-  Map<String, String> _authData = {'email': '', 'password': ''};
   bool _isLoading = false;
+  AnimationController? _animationController;
+  Animation<Size>? _heightAnimation;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,7 @@ class _AuthFormState extends State<AuthForm> {
       elevation: 8,
       child: Container(
         width: deviceSize.width * 0.85,
+        height: _heightAnimation?.value.height ?? _defaultHeight,
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
@@ -70,10 +75,7 @@ class _AuthFormState extends State<AuthForm> {
               if (_isLoading)
                 const CircularProgressIndicator()
               else
-                ElevatedButton(
-                  onPressed: () => _submit(provider),
-                  child: Text(_isLogin() ? 'Login' : 'Signup'),
-                ),
+                ElevatedButton(onPressed: () => _submit(provider), child: Text(_isLogin() ? 'Login' : 'Signup')),
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () => _authModeToggle(),
@@ -86,11 +88,42 @@ class _AuthFormState extends State<AuthForm> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+
+    _heightAnimation = Tween<Size>(
+      begin: const Size(double.infinity, _defaultHeight),
+      end: const Size(double.infinity, _defaultHeight + 60),
+    ).animate(CurvedAnimation(parent: _animationController!, curve: Curves.easeIn));
+
+    _heightAnimation?.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController?.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   bool _isLogin() => _authMode == _AuthMode.login;
 
   bool _isSignup() => _authMode == _AuthMode.signup;
 
-  void _authModeToggle() => setState(() => _authMode = _isLogin() ? _AuthMode.signup : _AuthMode.login);
+  void _authModeToggle() => setState(() {
+    if (_isLogin()) {
+      _authMode = _AuthMode.signup;
+      _animationController?.forward();
+    } else {
+      _authMode = _AuthMode.login;
+      _animationController?.reverse();
+    }
+  });
 
   Future<void> _submit(Auth provider) async {
     final isValid = _formKey.currentState?.validate() ?? false;
@@ -115,16 +148,12 @@ class _AuthFormState extends State<AuthForm> {
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('An error occurred!'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Okay'),
-            onPressed: () => Navigator.of(ctx).pop(),
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text('An error occurred!'),
+            content: Text(message),
+            actions: <Widget>[TextButton(child: const Text('Okay'), onPressed: () => Navigator.of(ctx).pop())],
           ),
-        ],
-      ),
     );
   }
 }

@@ -86,7 +86,9 @@ class Auth with ChangeNotifier {
     _expiryDate = null;
     _userId = null;
     _clearLogoutTimer();
-    notifyListeners();
+    Storage.removeData(Constants.userDataPreference).then((_) {
+      notifyListeners();
+    });
   }
 
   void _clearLogoutTimer() {
