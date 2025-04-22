@@ -14,10 +14,7 @@ class AppDrawerWidget extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          AppBar(
-            title: const Text('Hello Friend!'),
-            automaticallyImplyLeading: false,
-          ),
+          AppBar(title: const Text('Hello Friend!'), automaticallyImplyLeading: false),
           Divider(),
           ListTile(
             leading: const Icon(Icons.shop),
@@ -34,6 +31,7 @@ class AppDrawerWidget extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed(AppPages.orders);
+              // Navigator.of(context).pushReplacement(CustomRoute(builder: (context) => const OrdersPage()));
             },
           ),
           Divider(color: Theme.of(context).colorScheme.outline),

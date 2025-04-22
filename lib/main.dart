@@ -10,6 +10,7 @@ import 'package:shop_flutter/pages/product_detail_page.dart';
 import 'package:shop_flutter/pages/product_form_page.dart';
 import 'package:shop_flutter/pages/product_manager_page.dart';
 import 'package:shop_flutter/utils/app_pages.dart';
+import 'package:shop_flutter/utils/custom_route.dart';
 
 import 'models/product_list.dart';
 
@@ -67,6 +68,12 @@ class MyApp extends StatelessWidget {
               textStyle: const TextStyle(fontSize: 16, fontFamily: "Anton"),
             ),
           ),
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CustomPageTransitionsBuilder(),
+              TargetPlatform.iOS: CustomPageTransitionsBuilder(),
+            },
+          )
         ),
         // home: ProductsOverviewPage(),
         routes: {
