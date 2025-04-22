@@ -17,29 +17,31 @@ class _OrderWidgetState extends State<OrderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(
-              '\$ ${widget.order.total.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    final itemsHeight = (widget.order.items.length * 28.0) + 10.0;
+
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      height: _expanded ? itemsHeight + 100 : 100,
+      child: Card(
+        margin: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(
+                '\$ ${widget.order.total.toStringAsFixed(2)}',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(DateFormat('dd/MM/yyyy hh:mm').format(widget.order.dateTime)),
+              trailing: IconButton(
+                onPressed: () => setState(() => _expanded = !_expanded),
+                icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+              ),
             ),
-            subtitle: Text(DateFormat('dd/MM/yyyy hh:mm').format(widget.order.dateTime)),
-            trailing: IconButton(
-              onPressed: () {
-                setState(() {
-                  _expanded = !_expanded;
-                });
-              },
-              icon: Icon(Icons.expand_more),
-            ),
-          ),
-          if (_expanded)
-            Container(
+            // if (_expanded)
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300),
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              height: widget.order.items.length * 30.0 + 10,
+              height: _expanded ? itemsHeight : 0,
               child: ListView(
                 children:
                     widget.order.items
@@ -58,7 +60,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                         .toList(),
               ),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }
