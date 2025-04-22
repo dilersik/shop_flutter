@@ -5,6 +5,7 @@ import '../models/auth.dart';
 import '../utils/validator.dart';
 
 const double _defaultHeight = 360;
+const double _expandedHeight = 420;
 
 class AuthForm extends StatefulWidget {
   const AuthForm({super.key});
@@ -30,10 +31,13 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 8,
-      child: Container(
+      child: AnimatedContainer(
         width: deviceSize.width * 0.85,
-        height: _heightAnimation?.value.height ?? _defaultHeight,
+        // height: _heightAnimation?.value.height ?? _defaultHeight
+        height: _isLogin() ? _defaultHeight : _expandedHeight,
         padding: const EdgeInsets.all(16),
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeIn,
         child: Form(
           key: _formKey,
           child: Column(
@@ -96,7 +100,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
 
     _heightAnimation = Tween<Size>(
       begin: const Size(double.infinity, _defaultHeight),
-      end: const Size(double.infinity, _defaultHeight + 60),
+      end: const Size(double.infinity, _expandedHeight),
     ).animate(CurvedAnimation(parent: _animationController!, curve: Curves.easeIn));
 
     _heightAnimation?.addListener(() {
