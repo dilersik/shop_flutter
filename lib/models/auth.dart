@@ -9,8 +9,6 @@ import 'package:shop_flutter/exceptions/auth_exception.dart';
 import '../utils/constants.dart';
 
 class Auth with ChangeNotifier {
-  static const String _key = 'AIzaSyAGZvMYXrwQ8cQDfQ27LZdgMbsVk0Y43x8';
-  static const String _baseUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:';
 
   String? _token;
   String? _email;
@@ -25,7 +23,7 @@ class Auth with ChangeNotifier {
 
   Future<void> _authenticate(String email, String password, String urlSegment) async {
     final response = await post(
-      Uri.parse('$_baseUrl$urlSegment?key=$_key'),
+      Uri.parse('${Constants.firebaseAuthUrl}$urlSegment?key=${Constants.apiKey}'),
       body: jsonEncode({
         'email': email,
         'password': password,
