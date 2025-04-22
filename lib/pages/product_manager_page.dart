@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter/models/product_list.dart';
 import 'package:shop_flutter/utils/app_pages.dart';
-import 'package:shop_flutter/widgets/app_drawer.dart';
+import 'package:shop_flutter/widgets/app_drawer_widget.dart';
 import 'package:shop_flutter/widgets/product_manager_item_widget.dart';
 
 class ProductManagerPage extends StatelessWidget {
@@ -24,7 +24,7 @@ class ProductManagerPage extends StatelessWidget {
           ),
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: AppDrawerWidget(),
       body: RefreshIndicator(
         onRefresh: () => _refreshProducts(context),
         child: Padding(

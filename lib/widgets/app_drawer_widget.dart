@@ -4,8 +4,8 @@ import 'package:shop_flutter/utils/app_pages.dart';
 
 import '../models/auth.dart';
 
-class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key});
+class AppDrawerWidget extends StatelessWidget {
+  const AppDrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter/utils/app_pages.dart';
-import 'package:shop_flutter/widgets/app_drawer.dart';
+import 'package:shop_flutter/widgets/app_drawer_widget.dart';
 import 'package:shop_flutter/widgets/badge_widget.dart';
 
 import '../models/cart.dart';
@@ -64,7 +64,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
           _isLoading
               ? Center(child: CircularProgressIndicator())
               : ProductGridWidget(showFavoritesOnly: _showFavoritesOnly),
-      drawer: AppDrawer(),
+      drawer: AppDrawerWidget(),
     );
   }
 

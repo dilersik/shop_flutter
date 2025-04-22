@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter/models/order_list.dart';
-import 'package:shop_flutter/widgets/app_drawer.dart';
+import 'package:shop_flutter/widgets/app_drawer_widget.dart';
 import 'package:shop_flutter/widgets/order_widget.dart';
 
 class OrdersPage extends StatelessWidget {
@@ -16,7 +16,7 @@ class OrdersPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text('Orders')),
-      drawer: AppDrawer(),
+      drawer: AppDrawerWidget(),
       body: FutureBuilder(
         future: orderList.loadOrders(),
         builder: (ctx, snapshot) {
